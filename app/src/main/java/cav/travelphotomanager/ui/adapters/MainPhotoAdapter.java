@@ -29,6 +29,7 @@ public class MainPhotoAdapter extends RecyclerView.Adapter<MainPhotoAdapter.View
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         MainPhotoModels models = mData.get(position);
+        holder.mCoordinate.setText("А тут координаты");
 
     }
 
@@ -38,6 +39,11 @@ public class MainPhotoAdapter extends RecyclerView.Adapter<MainPhotoAdapter.View
             return mData.size();
         }
         return 0;
+    }
+
+    public void setData(List<MainPhotoModels> data) {
+        mData.clear();
+        mData.addAll(data);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

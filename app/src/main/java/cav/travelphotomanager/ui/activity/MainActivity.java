@@ -3,6 +3,7 @@ package cav.travelphotomanager.ui.activity;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
@@ -21,6 +22,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private DataManager mDataManager;
 
+    private MainPhotoAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,15 +36,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         mRecyclerView = (RecyclerView) findViewById(R.id.recycle_viewv);
 
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(linearLayoutManager);
+
+        updateUI();
+    }
+
+    private void updateUI(){
         List<MainPhotoModels> models = mDataManager.getDB().getAllRecord();
-        MainPhotoAdapter adapter = new MainPhotoAdapter(models);
-
-        mRecyclerView.setAdapter(adapter);
-
+        if (adapter == null){
+            adapter = new MainPhotoAdapter(models);
+            mRecyclerView.setAdapter(adapter);
+        } else {
+            adapter.setData(models);
+            adapter.notifyDataSetChanged();
+        }
     }
 
     @Override
     public void onClick(View view) {
         mDataManager.getDB().addNewRecord();
+        updateUI();
     }
 }

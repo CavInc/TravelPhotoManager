@@ -1,5 +1,6 @@
 package cav.travelphotomanager.data.database;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -38,7 +39,9 @@ public class DBConnect {
 
     public void addNewRecord(){
         open();
-        database.insert(DBHelper.PHOTOINFO,null,null);
+        ContentValues values = new ContentValues();
+        values.put("file_img1","");
+        database.insert(DBHelper.PHOTOINFO,null,values);
         close();
     }
 

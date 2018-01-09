@@ -8,8 +8,14 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".ui.activity.MainActivity">
+    <TextView
+        android:id="@+id/xll"
+        android:text="Yo Yo Yo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycle_viewv"
+        android:layout_below="@+id/xll"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
