@@ -64,4 +64,13 @@ public class DBConnect {
         return rec;
     }
 
+    public void updateRecord(int id,int img_id,String value){
+        open();
+        ContentValues values = new ContentValues();
+        //values.put("id",id);
+        values.put("file_img"+img_id,value);
+        database.update(DBHelper.PHOTOINFO,values,"id="+id,null);
+        close();
+    }
+
 }

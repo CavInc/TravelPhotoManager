@@ -19,6 +19,10 @@ public class MainPhotoModels {
         mImg3 = img3;
     }
 
+    public int getId() {
+        return mId;
+    }
+
     public String getImg1() {
         return mImg1;
     }
