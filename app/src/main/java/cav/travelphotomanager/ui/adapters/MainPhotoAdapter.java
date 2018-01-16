@@ -30,7 +30,7 @@ public class MainPhotoAdapter extends RecyclerView.Adapter<MainPhotoAdapter.View
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, final int position) {
         MainPhotoModels models = mData.get(position);
         if (models.getImg1() != null  && models.getImg1().length()!=0) {
             holder.mImg1.setImageBitmap(Func.getPicSize(models.getImg1(),holder.mImg1));
@@ -43,6 +43,16 @@ public class MainPhotoAdapter extends RecyclerView.Adapter<MainPhotoAdapter.View
         }
         holder.mCoordinate.setText("А тут координаты");
 
+        holder.v.setOnLongClickListener(new View.OnLongClickListener(){
+
+            @Override
+            public boolean onLongClick(View view) {
+                if (mCallbackClickListener!= null) {
+                    mCallbackClickListener.OnLongItemClick(position);
+                }
+                return true;
+            }
+        });
     }
 
     @Override
@@ -68,6 +78,8 @@ public class MainPhotoAdapter extends RecyclerView.Adapter<MainPhotoAdapter.View
         private ImageView mImg3;
         private TextView mCoordinate;
 
+        public View v;
+
         private CallbackClickListener mCallbackClickListener;
 
 
@@ -82,6 +94,8 @@ public class MainPhotoAdapter extends RecyclerView.Adapter<MainPhotoAdapter.View
             mImg1.setOnClickListener(this);
             mImg2.setOnClickListener(this);
             mImg3.setOnClickListener(this);
+
+            v = itemView;
         }
 
         @Override
@@ -103,6 +117,7 @@ public class MainPhotoAdapter extends RecyclerView.Adapter<MainPhotoAdapter.View
 
         public interface CallbackClickListener {
             public void OnClick(int position,int img);
+            public void OnLongItemClick(int position);
         }
     }
 
