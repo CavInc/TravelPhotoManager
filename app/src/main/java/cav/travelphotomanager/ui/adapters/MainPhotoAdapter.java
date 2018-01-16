@@ -29,8 +29,11 @@ public class MainPhotoAdapter extends RecyclerView.Adapter<MainPhotoAdapter.View
         return new ViewHolder(contentView,mCallbackClickListener);
     }
 
+    private int mPosition;
+
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
+        mPosition = position;
         MainPhotoModels models = mData.get(position);
         if (models.getImg1() != null  && models.getImg1().length()!=0) {
             holder.mImg1.setImageBitmap(Func.getPicSize(models.getImg1(),holder.mImg1));
@@ -43,17 +46,23 @@ public class MainPhotoAdapter extends RecyclerView.Adapter<MainPhotoAdapter.View
         }
         holder.mCoordinate.setText("А тут координаты");
 
-        holder.v.setOnLongClickListener(new View.OnLongClickListener(){
+        holder.v.setOnLongClickListener(mLongClickListener);
 
-            @Override
-            public boolean onLongClick(View view) {
-                if (mCallbackClickListener!= null) {
-                    mCallbackClickListener.OnLongItemClick(position);
-                }
-                return true;
-            }
-        });
+        holder.mImg1.setOnLongClickListener(mLongClickListener);
+        holder.mImg2.setOnLongClickListener(mLongClickListener);
+        holder.mImg3.setOnLongClickListener(mLongClickListener);
+
     }
+
+    View.OnLongClickListener mLongClickListener = new View.OnLongClickListener() {
+        @Override
+        public boolean onLongClick(View view) {
+            if (mCallbackClickListener!= null) {
+                mCallbackClickListener.OnLongItemClick(mPosition);
+            }
+            return true;
+        }
+    };
 
     @Override
     public int getItemCount() {

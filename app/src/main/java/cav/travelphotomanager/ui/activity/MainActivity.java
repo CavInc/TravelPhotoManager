@@ -10,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,6 +27,7 @@ import cav.travelphotomanager.utils.ConstantManager;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
+    private static final String TAG = "MA";
     private FloatingActionButton mFab;
     private RecyclerView mRecyclerView;
 
@@ -92,6 +94,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             captureImage.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(image));
             startActivityForResult(captureImage, ConstantManager.REQUEST_CAMERA_PICTURE);
         }
+
+        @Override
+        public void OnLongItemClick(int position) {
+            Log.d(TAG,"LONG CLICK");
+        }
     };
 
     @Override
@@ -107,4 +114,5 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
         }
     }
+
 }
