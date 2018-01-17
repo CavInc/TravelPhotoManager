@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">CountryPhoto</string>
+    <string name="dialog_cancel">Отмена</string>
+    <string name="dialog_ok">Да</string>
 </resources>

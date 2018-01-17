@@ -73,4 +73,10 @@ public class DBConnect {
         close();
     }
 
+    public void deleteRecord(int id){
+        open();
+        database.delete(DBHelper.PHOTOINFO,"id="+id,null);
+        close();
+    }
+
 }

@@ -1,5 +1,7 @@
 package cav.travelphotomanager.ui.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.provider.MediaStore;
@@ -96,8 +98,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         @Override
-        public void OnLongItemClick(int position) {
+        public void OnLongItemClick(final int position) {
             Log.d(TAG,"LONG CLICK");
+            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+            AlertDialog dialog = builder.setTitle("Удаление").setMessage("Удаляем ? Вы уверенны ?")
+                    .setNegativeButton(R.string.dialog_cancel, null)
+                    .setPositiveButton(R.string.dialog_ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            mDataManager.getDB().deleteRecord(position);
+                            updateUI();
+                        }
+                    }).create();
+            dialog.show();
+
         }
     };
 
