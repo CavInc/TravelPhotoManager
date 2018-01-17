@@ -1,16 +1,26 @@
 package cav.travelphotomanager.ui.activity;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 
@@ -30,12 +40,15 @@ import cav.travelphotomanager.utils.ConstantManager;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = "MA";
+    private static final int PERMISSION_REQUEST_CODE = 1000;
     private FloatingActionButton mFab;
     private RecyclerView mRecyclerView;
 
     private DataManager mDataManager;
 
     private MainPhotoAdapter adapter;
+
+    private LocationManager locationManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +66,69 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mRecyclerView.setLayoutManager(linearLayoutManager);
 
         updateUI();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+      /*
+        if (ContextCompat.checkSelfPermission(this,android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
+
+        }
+        */
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
+                            Manifest.permission.ACCESS_COARSE_LOCATION},PERMISSION_REQUEST_CODE);
+            return; // подумать о перезапуске навигации после разрешения
+        }
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.main_gps:
+                startActivity(new Intent(
+                        android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                break;
+        }
+        return true;
+    }
+
+    @SuppressWarnings("MissingPermission")
+    private void setStartLocation(){
+        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
+                1000 * 10, 10, locationListener);
+        locationManager.requestLocationUpdates(
+                LocationManager.NETWORK_PROVIDER, 1000 * 10, 10,
+                locationListener);
+    }
+
+    @SuppressWarnings("MissingPermission")
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (locationManager != null) {
+            locationManager.removeUpdates(locationListener);
+        }
     }
 
     private void updateUI(){
@@ -127,6 +203,39 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 break;
         }
+    }
+
+
+    private LocationListener locationListener = new LocationListener(){
+
+        @Override
+        public void onLocationChanged(Location location) {
+
+        }
+
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle bundle) {
+
+        }
+
+        @Override
+        public void onProviderEnabled(String provider) {
+
+        }
+
+        @Override
+        public void onProviderDisabled(String provider) {
+
+        }
+    };
+
+    private String formatLocation(Location location) {
+        if (location == null)
+            return "";
+        return String.format(
+                "Coordinates: lat = %1$.4f, lon = %2$.4f, time = %3$tF %3$tT",
+                location.getLatitude(), location.getLongitude(), new Date(
+                        location.getTime()));
     }
 
 }
