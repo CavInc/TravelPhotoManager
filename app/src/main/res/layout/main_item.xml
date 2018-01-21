@@ -48,6 +48,7 @@
             <TextView
                 android:id="@+id/itemc_coordinate"
                 android:text="А тут координаты"
+                android:autoLink="web"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 

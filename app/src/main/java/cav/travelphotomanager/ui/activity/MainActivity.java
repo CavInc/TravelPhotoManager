@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             Manifest.permission.ACCESS_COARSE_LOCATION},PERMISSION_REQUEST_CODE);
             return; // подумать о перезапуске навигации после разрешения
         }
-
+        setStartLocation();
     }
 
     @Override
@@ -144,7 +144,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View view) {
-        mDataManager.getDB().addNewRecord();
+        double lon = 0.0;
+        double lat = 0.0;
+        if (lonGPS != 0.0) {
+            lon = lonGPS;
+        } else {
+            lon = lonWIFI;
+        }
+        if (latGPS != 0.0) {
+            lat = latGPS;
+        } else {
+            lat = latWiFI;
+        }
+        mDataManager.getDB().addNewRecord(lon,lat);
         updateUI();
     }
 
@@ -207,27 +219,57 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     private LocationListener locationListener = new LocationListener(){
+        public static final String TAG = "LOCATION LISTENER";
 
         @Override
         public void onLocationChanged(Location location) {
-
+            Log.d(TAG,"LOCATION CHANGED");
+            showLocation(location);
         }
 
         @Override
         public void onStatusChanged(String provider, int status, Bundle bundle) {
-
+            Log.d(TAG,"STATUS CHANGED");
         }
 
         @Override
         public void onProviderEnabled(String provider) {
-
+            Log.d(TAG,"PROVIDER ENABLE");
         }
 
         @Override
         public void onProviderDisabled(String provider) {
+            Log.d(TAG,"PROVIDER DISABLE");
+            latGPS = 0.0f;
+            lonGPS = 0.0f;
+            latWiFI = 0.0f;
+            lonWIFI = 0.0f;
 
         }
     };
+
+    private void showLocation(Location location) {
+        if (location == null)
+            return;
+        if (location.getProvider().equals(LocationManager.GPS_PROVIDER)) {
+            //tvLocationGPS.setText(formatLocation(location));
+            Log.d(TAG +"GPS",formatLocation(location));
+            latGPS = location.getLatitude();
+            lonGPS = location.getLongitude();
+        } else if (location.getProvider().equals(
+                LocationManager.NETWORK_PROVIDER)) {
+            //tvLocationNet.setText(formatLocation(location));
+            Log.d(TAG + " WIFI ",formatLocation(location));
+            latWiFI = location.getLatitude();
+            lonWIFI = location.getLongitude();
+        }
+    }
+
+    private double latGPS = 0.0f;
+    private double lonGPS = 0.0f;
+    private double latWiFI = 0.0f;
+    private double lonWIFI = 0.0f;
+
 
     private String formatLocation(Location location) {
         if (location == null)

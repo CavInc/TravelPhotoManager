@@ -44,7 +44,13 @@ public class MainPhotoAdapter extends RecyclerView.Adapter<MainPhotoAdapter.View
         if (models.getImg3() != null  && models.getImg3().length()!=0) {
             holder.mImg3.setImageBitmap(Func.getPicSize(models.getImg3(),holder.mImg2));
         }
-        holder.mCoordinate.setText("А тут координаты");
+        if (models.getLat() == 0.0 && models.getLon() == 0.0) {
+            holder.mCoordinate.setText("А тут координаты");
+        } else {
+            holder.mCoordinate.setText(String.format("Координаты : lat = %1$.4f, lon = %2$.4f",
+                    models.getLat(),models.getLon())
+                    +"\n\n"+models.getUlr());
+        }
 
         holder.v.setOnLongClickListener(mLongClickListener);
 
