@@ -213,6 +213,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     MainPhotoAdapter.ViewHolder.CallbackClickListener mImgListener = new MainPhotoAdapter.ViewHolder.CallbackClickListener() {
         @Override
         public void OnClick(int position, int img) {
+
+            String fileImg = adapter.getPosition(position).getImg(img);
+            //Log.d(TAG,"LEN "+fileImg.length());
+            if (fileImg != null && fileImg.length() != 0) {
+                Log.d(TAG,"USE PHOTO");
+                return;
+            }
+
             mPosition = position;
             mImg = img;
             String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
@@ -259,6 +267,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     MainPhotoModels model = adapter.getPosition(mPosition);
                     mDataManager.getDB().updateRecord(model.getId(),mImg,mPhotoFile.toString());
                     updateUI();
+                    mPhotoFile = null;
                 }
                 break;
         }

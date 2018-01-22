@@ -4,9 +4,9 @@ import java.util.Date;
 
 public class MainPhotoModels {
     private int mId;
-    private String mImg1;
-    private String mImg2;
-    private String mImg3;
+    private String mImg1 = "";
+    private String mImg2 = "";
+    private String mImg3 = "";
     private double lon = 0.0;
     private double lat = 0.0;
     private String ulr;
@@ -85,5 +85,17 @@ public class MainPhotoModels {
 
     public Date getCreateDate() {
         return createDate;
+    }
+
+    public String getImg(int id) {
+        switch (id){
+            case 1:
+                return mImg1;
+            case 2:
+                return mImg2;
+            case 3:
+                return mImg3;
+        }
+        return null;
     }
 }
