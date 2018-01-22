@@ -44,6 +44,17 @@ public class MainPhotoModels {
         this.ulr = ulr;
     }
 
+    public MainPhotoModels(int id, String img1, String img2, String img3, double lon, double lat, String ulr, Date createDate) {
+        mId = id;
+        mImg1 = img1;
+        mImg2 = img2;
+        mImg3 = img3;
+        this.lon = lon;
+        this.lat = lat;
+        this.ulr = ulr;
+        this.createDate = createDate;
+    }
+
     public int getId() {
         return mId;
     }
@@ -70,5 +81,9 @@ public class MainPhotoModels {
 
     public String getUlr() {
         return ulr;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
     }
 }

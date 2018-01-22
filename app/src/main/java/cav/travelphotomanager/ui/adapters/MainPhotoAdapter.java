@@ -52,23 +52,8 @@ public class MainPhotoAdapter extends RecyclerView.Adapter<MainPhotoAdapter.View
                     +"\n\n"+models.getUlr());
         }
 
-        holder.v.setOnLongClickListener(mLongClickListener);
-
-        holder.mImg1.setOnLongClickListener(mLongClickListener);
-        holder.mImg2.setOnLongClickListener(mLongClickListener);
-        holder.mImg3.setOnLongClickListener(mLongClickListener);
-
     }
 
-    View.OnLongClickListener mLongClickListener = new View.OnLongClickListener() {
-        @Override
-        public boolean onLongClick(View view) {
-            if (mCallbackClickListener!= null) {
-                mCallbackClickListener.OnLongItemClick(mPosition);
-            }
-            return true;
-        }
-    };
 
     @Override
     public int getItemCount() {
@@ -87,7 +72,7 @@ public class MainPhotoAdapter extends RecyclerView.Adapter<MainPhotoAdapter.View
         return mData.get(position);
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,View.OnLongClickListener {
         private ImageView mImg1;
         private ImageView mImg2;
         private ImageView mImg3;
@@ -111,6 +96,12 @@ public class MainPhotoAdapter extends RecyclerView.Adapter<MainPhotoAdapter.View
             mImg3.setOnClickListener(this);
 
             v = itemView;
+
+            itemView.setOnLongClickListener(this);
+
+            mImg1.setOnLongClickListener(this);
+            mImg2.setOnLongClickListener(this);
+            mImg3.setOnLongClickListener(this);
         }
 
         @Override
@@ -128,6 +119,14 @@ public class MainPhotoAdapter extends RecyclerView.Adapter<MainPhotoAdapter.View
                     mCallbackClickListener.OnClick(getAdapterPosition(),3);
                     break;
             }
+        }
+
+        @Override
+        public boolean onLongClick(View view) {
+            if (mCallbackClickListener!= null) {
+                mCallbackClickListener.OnLongItemClick(getAdapterPosition());
+            }
+            return true;
         }
 
         public interface CallbackClickListener {
