@@ -1,6 +1,7 @@
 package cav.travelphotomanager.ui.activity;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -10,6 +11,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -41,6 +43,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private static final String TAG = "MA";
     private static final int PERMISSION_REQUEST_CODE = 1000;
+    private static final int PERMISSION_REQUEST_WSD = 1001;
     private FloatingActionButton mFab;
     private RecyclerView mRecyclerView;
 
@@ -49,6 +52,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private MainPhotoAdapter adapter;
 
     private LocationManager locationManager;
+    private boolean isGpsPresent = false;
+    private boolean isNetWork = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +96,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             Manifest.permission.ACCESS_COARSE_LOCATION},PERMISSION_REQUEST_CODE);
             return; // подумать о перезапуске навигации после разрешения
         }
+        if (ActivityCompat.checkSelfPermission(this,Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},PERMISSION_REQUEST_WSD);
+        }
         setStartLocation();
     }
 
@@ -112,14 +121,51 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return true;
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case PERMISSION_REQUEST_CODE:
+                if (grantResults.length!=0){
+
+                }
+                break;
+            case PERMISSION_REQUEST_WSD:
+                if (grantResults.length!=0){
+                    if (grantResults[0]==PackageManager.PERMISSION_DENIED) {
+                        // тут говорим что хуй а не работа без прав на SD
+                    }
+                }
+                break;
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
     @SuppressWarnings("MissingPermission")
     private void setStartLocation(){
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
-                1000 * 10, 10, locationListener);
-        locationManager.requestLocationUpdates(
-                LocationManager.NETWORK_PROVIDER, 1000 * 10, 10,
-                locationListener);
+
+        /*
+        List<String> matchingProviders = locationManager.getAllProviders();
+        for (String provider:matchingProviders){
+            Log.i(TAG," Provider: "+matchingProviders);
+        }
+        */
+
+        isGpsPresent = locationManager.getProvider(LocationManager.GPS_PROVIDER) != null;
+        isNetWork = locationManager.getProvider(LocationManager.NETWORK_PROVIDER) != null;
+
+        Log.i(TAG,"GPS :"+isGpsPresent+" NET: "+isNetWork);
+
+        if (isGpsPresent) {
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
+                    1000 * 10, 10, locationListener);
+        }
+
+        if (isNetWork) {
+            locationManager.requestLocationUpdates(
+                    LocationManager.NETWORK_PROVIDER, 1000 * 10, 10,
+                    locationListener);
+        }
     }
 
     @SuppressWarnings("MissingPermission")
