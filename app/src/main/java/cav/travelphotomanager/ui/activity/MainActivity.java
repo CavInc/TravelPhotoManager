@@ -240,7 +240,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     .setPositiveButton(R.string.dialog_ok, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            mDataManager.getDB().deleteRecord(position);
+                            Log.i(TAG,"POS ID :"+adapter.getPosition(position).getId());
+                            mDataManager.getDB().deleteRecord(adapter.getPosition(position).getId());
                             updateUI();
                         }
                     }).create();

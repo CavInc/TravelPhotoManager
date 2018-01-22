@@ -4,6 +4,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.view.View;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class Func {
 
     public static Bitmap getPicSize(String mCurrentPhotoPath, View view){
@@ -30,6 +33,11 @@ public class Func {
         Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
 
         return bitmap;
+    }
+
+    public static String dateToStr(String mask,Date date){
+        SimpleDateFormat format = new SimpleDateFormat(mask);
+        return format.format(date);
     }
 
 }

@@ -6,9 +6,11 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import cav.travelphotomanager.data.models.MainPhotoModels;
 import cav.travelphotomanager.utils.ConstantManager;
+import cav.travelphotomanager.utils.Func;
 
 public class DBConnect {
     private SQLiteDatabase database;
@@ -42,6 +44,7 @@ public class DBConnect {
         open();
         ContentValues values = new ContentValues();
         values.put("file_img1","");
+        values.put("create_date", Func.dateToStr("yyyy-MM-dd",new Date()));
         values.put("lon",lon);
         values.put("lat",lat);
         if (lat != 0.0 && lon != 0.0){
