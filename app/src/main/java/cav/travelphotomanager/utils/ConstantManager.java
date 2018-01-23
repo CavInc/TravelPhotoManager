@@ -6,4 +6,6 @@ public interface ConstantManager {
     int REQUEST_CAMERA_PICTURE = 100;
 
     String googleUrl = "http://maps.google.com/maps?q=";
+    String REQUEST_FILENAME = "REQUEST_FILENAME";
+    String REQUEST_ID = "REQUEST_ID";
 }

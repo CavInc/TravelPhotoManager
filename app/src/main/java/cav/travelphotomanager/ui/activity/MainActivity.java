@@ -218,6 +218,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             //Log.d(TAG,"LEN "+fileImg.length());
             if (fileImg != null && fileImg.length() != 0) {
                 Log.d(TAG,"USE PHOTO");
+                Intent viewIntent = new Intent(MainActivity.this,ViewPhotoActivity.class);
+                viewIntent.putExtra(ConstantManager.REQUEST_FILENAME,fileImg);
+                viewIntent.putExtra(ConstantManager.REQUEST_ID,adapter.getPosition(position).getId());
+                startActivity(viewIntent);
                 return;
             }
 
