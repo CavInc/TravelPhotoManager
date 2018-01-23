@@ -37,12 +37,18 @@ public class MainPhotoAdapter extends RecyclerView.Adapter<MainPhotoAdapter.View
         MainPhotoModels models = mData.get(position);
         if (models.getImg1() != null  && models.getImg1().length()!=0) {
             holder.mImg1.setImageBitmap(Func.getPicSize(models.getImg1(),holder.mImg1));
+        } else {
+            holder.mImg1.setImageResource(R.drawable.nofoto);
         }
         if (models.getImg2() != null  && models.getImg2().length()!=0) {
             holder.mImg2.setImageBitmap(Func.getPicSize(models.getImg2(),holder.mImg2));
+        } else {
+            holder.mImg2.setImageResource(R.drawable.nofoto);
         }
         if (models.getImg3() != null  && models.getImg3().length()!=0) {
             holder.mImg3.setImageBitmap(Func.getPicSize(models.getImg3(),holder.mImg2));
+        } else {
+            holder.mImg3.setImageResource(R.drawable.nofoto);
         }
         if (models.getLat() == 0.0 && models.getLon() == 0.0) {
             holder.mCoordinate.setText("А тут координаты");
