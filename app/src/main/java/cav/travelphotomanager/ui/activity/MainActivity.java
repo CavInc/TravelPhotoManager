@@ -3,6 +3,7 @@ package cav.travelphotomanager.ui.activity;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -239,8 +240,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
             mPhotoFile = image;
             Intent captureImage = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+            // для А7
+            Log.d(TAG,"SETTING A7");
+            ContentValues values = new ContentValues();
+            values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpg");
+           // fileUri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+            captureImage.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+            //
+
             captureImage.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(image));
-            startActivityForResult(captureImage, ConstantManager.REQUEST_CAMERA_PICTURE);
+            try {
+                startActivityForResult(captureImage, ConstantManager.REQUEST_CAMERA_PICTURE);
+            } catch (Exception e){
+                e.printStackTrace();
+            }
         }
 
         @Override
