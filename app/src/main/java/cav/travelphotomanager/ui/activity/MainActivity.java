@@ -11,11 +11,13 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -242,14 +244,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Intent captureImage = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
             // для А7
-            Log.d(TAG,"SETTING A7");
-            ContentValues values = new ContentValues();
-            values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpg");
-           // fileUri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
-            captureImage.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-            //
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N ) {
+                Log.d(TAG, "SETTING A7");
+                ContentValues values = new ContentValues();
+                values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpg");
+                //Uri fileUri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+                Uri fileUri = FileProvider.getUriForFile(MainActivity.this,
+                        MainActivity.this.getApplicationContext().getPackageName() + ".ui.activity.provider", image);
 
-            captureImage.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(image));
+                Log.d(TAG,MainActivity.this.getApplicationContext().getPackageName());
+
+                //Uri fileUri = getContentResolver().insert(Uri.parse("content://"+image.getAbsolutePath()),values);
+                Log.d(TAG, "URI :"+fileUri);
+                captureImage.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                captureImage.putExtra(MediaStore.EXTRA_OUTPUT,fileUri);
+                //
+            } else {
+                captureImage.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(image));
+            }
             try {
                 startActivityForResult(captureImage, ConstantManager.REQUEST_CAMERA_PICTURE);
             } catch (Exception e){
