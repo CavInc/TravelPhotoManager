@@ -250,7 +250,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpg");
                 //Uri fileUri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
                 Uri fileUri = FileProvider.getUriForFile(MainActivity.this,
-                        MainActivity.this.getApplicationContext().getPackageName() + ".ui.activity.provider", image);
+                        MainActivity.this.getApplicationContext().getPackageName() + ".provider", image);
 
                 Log.d(TAG,MainActivity.this.getApplicationContext().getPackageName());
 
