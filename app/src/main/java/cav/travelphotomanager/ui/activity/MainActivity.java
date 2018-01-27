@@ -47,6 +47,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final String TAG = "MA";
     private static final int PERMISSION_REQUEST_CODE = 1000;
     private static final int PERMISSION_REQUEST_WSD = 1001;
+
+    private static final String KEY_FILE_NAME = "FILE_NAME";
+    private static final String KEY_POSITION = "POSITION";
+    private static final String KEY_IMG_ID = "IMG_ID";
+
+
     private FloatingActionButton mFab;
     private RecyclerView mRecyclerView;
 
@@ -74,6 +80,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mRecyclerView.setLayoutManager(linearLayoutManager);
 
         updateUI();
+
+        if (savedInstanceState != null){
+            String mf = savedInstanceState.getString(KEY_FILE_NAME);
+            mPhotoFile = new File(mf);
+            mPosition = savedInstanceState.getInt(KEY_POSITION);
+            mImg = savedInstanceState.getInt(KEY_IMG_ID);
+        }
+
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (mPhotoFile != null) {
+            outState.putString(KEY_FILE_NAME, mPhotoFile.toString());
+        }
+        outState.putInt(KEY_POSITION,mPosition);
+        outState.putInt(KEY_IMG_ID,mImg);
     }
 
     @Override
