@@ -40,6 +40,7 @@ import cav.travelphotomanager.R;
 import cav.travelphotomanager.data.managers.DataManager;
 import cav.travelphotomanager.data.models.MainPhotoModels;
 import cav.travelphotomanager.ui.adapters.MainPhotoAdapter;
+import cav.travelphotomanager.ui.dialogs.SelectMainDialog;
 import cav.travelphotomanager.utils.ConstantManager;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -272,13 +273,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Log.d(TAG, "SETTING A7");
                 ContentValues values = new ContentValues();
                 values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpg");
-                //Uri fileUri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
                 Uri fileUri = FileProvider.getUriForFile(MainActivity.this,
                         MainActivity.this.getApplicationContext().getPackageName() + ".provider", image);
-
-                Log.d(TAG,MainActivity.this.getApplicationContext().getPackageName());
-
-                //Uri fileUri = getContentResolver().insert(Uri.parse("content://"+image.getAbsolutePath()),values);
                 Log.d(TAG, "URI :"+fileUri);
                 captureImage.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
                 captureImage.putExtra(MediaStore.EXTRA_OUTPUT,fileUri);
@@ -293,8 +289,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         }
 
+
         @Override
         public void OnLongItemClick(final int position) {
+            mSelectPosition = position;
+            SelectMainDialog dialog = SelectMainDialog.newInstance();
+            dialog.setSelectMainDialogListener(mDialogListener);
+            dialog.show(getFragmentManager(),"SMD");
+
+            /*
             Log.d(TAG,"LONG CLICK");
             AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
             AlertDialog dialog = builder.setTitle("Удаление").setMessage("Удаляем ? Вы уверенны ?")
@@ -308,6 +311,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         }
                     }).create();
             dialog.show();
+            */
 
         }
     };
@@ -326,6 +330,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
         }
     }
+
+
+    private int mSelectPosition;
+    SelectMainDialog.SelectMainDialogListener mDialogListener = new SelectMainDialog.SelectMainDialogListener() {
+        @Override
+        public void onSelectedItem(int item) {
+            switch (item){
+                case ConstantManager.SEND_ITEM:
+                    sendPositionPhoto(mSelectPosition);
+                    break;
+                case ConstantManager.DELETE_ITEM:
+                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                    AlertDialog dialog = builder.setTitle("Удаление").setMessage("Удаляем ? Вы уверенны ?")
+                            .setNegativeButton(R.string.dialog_cancel, null)
+                            .setPositiveButton(R.string.dialog_ok, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    Log.i(TAG,"POS ID :"+adapter.getPosition(mSelectPosition).getId());
+                                    mDataManager.getDB().deleteRecord(adapter.getPosition(mSelectPosition).getId());
+                                    updateUI();
+                                }
+                            }).create();
+                    dialog.show();
+                    break;
+            }
+        }
+    };
+
 
 
     private LocationListener locationListener = new LocationListener(){
@@ -390,8 +422,37 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         location.getTime()));
     }
 
+    private void sendPositionPhoto(int selectPosition) {
+        MainPhotoModels model = adapter.getPosition(selectPosition);
+        for (int i = 0 ;i<3;i++){
+            String mig = model.getImg(i);
+            if (mig !=null && mig.length() != 0 ){
+                galleryAddPic(mig);
+            }
+        }
+
+    }
+
+
     // Региструем в галерее
     private void galleryAddPic(String pathPhoto){
+        /*
+                    // для А7
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N ) {
+                Log.d(TAG, "SETTING A7");
+                ContentValues values = new ContentValues();
+                values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpg");
+                Uri fileUri = FileProvider.getUriForFile(MainActivity.this,
+                        MainActivity.this.getApplicationContext().getPackageName() + ".provider", image);
+                Log.d(TAG, "URI :"+fileUri);
+                captureImage.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                captureImage.putExtra(MediaStore.EXTRA_OUTPUT,fileUri);
+                //
+            } else {
+                captureImage.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(image));
+            }
+         */
+
         Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
         File f = new File(pathPhoto);
         Uri contentUri = Uri.fromFile(f);

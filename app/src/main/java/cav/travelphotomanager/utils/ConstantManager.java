@@ -8,4 +8,6 @@ public interface ConstantManager {
     String googleUrl = "http://maps.google.com/maps?q=";
     String REQUEST_FILENAME = "REQUEST_FILENAME";
     String REQUEST_ID = "REQUEST_ID";
+    int SEND_ITEM = 0;
+    int DELETE_ITEM = 1;
 }
