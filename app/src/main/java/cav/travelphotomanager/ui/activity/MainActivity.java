@@ -390,4 +390,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         location.getTime()));
     }
 
+    // Региструем в галерее
+    private void galleryAddPic(String pathPhoto){
+        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        File f = new File(pathPhoto);
+        Uri contentUri = Uri.fromFile(f);
+        mediaScanIntent.setData(contentUri);
+        this.sendBroadcast(mediaScanIntent);
+    }
+
 }

@@ -51,9 +51,10 @@ public class MainPhotoAdapter extends RecyclerView.Adapter<MainPhotoAdapter.View
             holder.mImg3.setImageResource(R.drawable.nofoto);
         }
         if (models.getLat() == 0.0 && models.getLon() == 0.0) {
-            holder.mCoordinate.setText("А тут координаты");
+            holder.mCoordinate.setText("Координаты не определены");
         } else {
-            holder.mCoordinate.setText(String.format("Координаты : lat = %1$.4f, lon = %2$.4f",
+            // Координаты : lat = %1$.4f, lon = %2$.4f
+            holder.mCoordinate.setText(String.format("Координаты : lat = %1$.6f, lon = %2$.6f",
                     models.getLat(),models.getLon())
                     +"\n\n"+models.getUlr());
         }
