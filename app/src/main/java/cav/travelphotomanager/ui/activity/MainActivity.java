@@ -84,7 +84,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         if (savedInstanceState != null){
             String mf = savedInstanceState.getString(KEY_FILE_NAME);
-            mPhotoFile = new File(mf);
+            if (mf.length() != 0 ) {
+                mPhotoFile = new File(mf);
+            }
             mPosition = savedInstanceState.getInt(KEY_POSITION);
             mImg = savedInstanceState.getInt(KEY_IMG_ID);
         }
@@ -424,7 +426,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void sendPositionPhoto(int selectPosition) {
         MainPhotoModels model = adapter.getPosition(selectPosition);
-        for (int i = 0 ;i<3;i++){
+        for (int i = 1 ;i<=3;i++){
             String mig = model.getImg(i);
             if (mig !=null && mig.length() != 0 ){
                 galleryAddPic(mig);
