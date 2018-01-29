@@ -40,6 +40,7 @@ import cav.travelphotomanager.R;
 import cav.travelphotomanager.data.managers.DataManager;
 import cav.travelphotomanager.data.models.MainPhotoModels;
 import cav.travelphotomanager.ui.adapters.MainPhotoAdapter;
+import cav.travelphotomanager.ui.dialogs.NewEditCardDialog;
 import cav.travelphotomanager.ui.dialogs.SelectMainDialog;
 import cav.travelphotomanager.utils.ConstantManager;
 
@@ -220,20 +221,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View view) {
-        double lon = 0.0;
-        double lat = 0.0;
-        if (lonGPS != 0.0) {
-            lon = lonGPS;
-        } else {
-            lon = lonWIFI;
-        }
-        if (latGPS != 0.0) {
-            lat = latGPS;
-        } else {
-            lat = latWiFI;
-        }
-        mDataManager.getDB().addNewRecord(lon,lat);
-        updateUI();
+        NewEditCardDialog dialog = new NewEditCardDialog();
+        dialog.setNewEditCardDialogListener(new NewEditCardDialog.NewEditCardDialogListener() {
+            @Override
+            public void changeName(String name) {
+                double lon = 0.0;
+                double lat = 0.0;
+                if (lonGPS != 0.0) {
+                    lon = lonGPS;
+                } else {
+                    lon = lonWIFI;
+                }
+                if (latGPS != 0.0) {
+                    lat = latGPS;
+                } else {
+                    lat = latWiFI;
+                }
+                mDataManager.getDB().addNewRecord(lon,lat,name);
+                updateUI();
+            }
+        });
+        dialog.show(getSupportFragmentManager(),"NEW");
     }
 
     private File mPhotoFile = null;

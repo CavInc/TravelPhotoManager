@@ -11,6 +11,7 @@ public class MainPhotoModels {
     private double lat = 0.0;
     private String ulr;
     private Date createDate;
+    private String nameCard;
 
     public MainPhotoModels(String img1, String img2, String img3) {
         mImg1 = img1;
@@ -55,6 +56,17 @@ public class MainPhotoModels {
         this.createDate = createDate;
     }
 
+    public MainPhotoModels(int id, String img1, String img2, String img3, double lon, double lat, String ulr, String nameCard) {
+        mId = id;
+        mImg1 = img1;
+        mImg2 = img2;
+        mImg3 = img3;
+        this.lon = lon;
+        this.lat = lat;
+        this.ulr = ulr;
+        this.nameCard = nameCard;
+    }
+
     public int getId() {
         return mId;
     }
@@ -85,6 +97,10 @@ public class MainPhotoModels {
 
     public Date getCreateDate() {
         return createDate;
+    }
+
+    public String getNameCard() {
+        return nameCard;
     }
 
     public String getImg(int id) {

@@ -37,6 +37,7 @@ public class DBHelper extends SQLiteOpenHelper {
                     "file_img3 text," +
                     "lon real,"+
                     "lat real,"+
+                    "name_record text,"+
                     "url_gm text)"); // ссылка для гугломапс
         }
     }

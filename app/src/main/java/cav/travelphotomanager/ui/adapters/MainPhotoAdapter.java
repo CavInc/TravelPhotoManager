@@ -58,6 +58,7 @@ public class MainPhotoAdapter extends RecyclerView.Adapter<MainPhotoAdapter.View
                     models.getLat(),models.getLon())
                     +"\n\n"+models.getUlr());
         }
+        holder.mCardName.setText(models.getNameCard());
 
     }
 
@@ -84,6 +85,7 @@ public class MainPhotoAdapter extends RecyclerView.Adapter<MainPhotoAdapter.View
         private ImageView mImg2;
         private ImageView mImg3;
         private TextView mCoordinate;
+        private TextView mCardName;
 
         public View v;
 
@@ -97,6 +99,7 @@ public class MainPhotoAdapter extends RecyclerView.Adapter<MainPhotoAdapter.View
             mImg2 = (ImageView) itemView.findViewById(R.id.item_im2);
             mImg3 = (ImageView) itemView.findViewById(R.id.item_im3);
             mCoordinate = (TextView) itemView.findViewById(R.id.itemc_coordinate);
+            mCardName = (TextView) itemView.findViewById(R.id.item_card_name);
 
             mImg1.setOnClickListener(this);
             mImg2.setOnClickListener(this);
